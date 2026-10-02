@@ -15,6 +15,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- SDK Firebase Compatibili per sincronizzazione in tempo reale -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
     <style>
         :root {
             --green-dark: #1F4D43;
@@ -195,7 +199,6 @@
             text-overflow: ellipsis;
         }
 
-        /* FRECCIA/TRIANGOLO INGRANDITA */
         .triangle-icon {
             width: 16px;
             height: 16px;
@@ -208,7 +211,6 @@
             transform: rotate(180deg);
         }
 
-        /* MENU TENDINA STILIZZATO (IN-STYLE) */
         .custom-dropdown-menu {
             display: none;
             position: absolute;
@@ -567,7 +569,26 @@
     <div class="slider-container" id="sliderContainer"></div>
 
     <script>
-        // CONFIGURAZIONE PWA
+        // --- CONFIGURAZIONE FIREBASE ---
+        // Sostituisci i valori sottostanti con le chiavi del tuo progetto Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5b9nmz4_ziG5kYXSLclpuyZUHhd4l_b0",
+            authDomain: "IL_TUO_PROGETTO.firebaseapp.com",
+            databaseURL: "https://IL_TUO_PROGETTO-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "IL_TUO_PROGETTO",
+            storageBucket: "IL_TUO_PROGETTO.appspot.com",
+            messagingSenderId: "NUMERO_SENDER",
+            appId: "IL_TUO_APP_ID"
+        };
+
+        // Inizializzazione Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+        const tripsRef = db.ref('vanlife_trips');
+
+        // --- CONFIGURAZIONE PWA ---
         const manifest = {
             name: "Vanlife Check G&R",
             short_name: "VanlifeCheck",
@@ -600,7 +621,7 @@
             navigator.serviceWorker.register(swURL).catch(() => {});
         }
 
-        // LOGICA APPLICAZIONE
+        // --- LOGICA APPLICAZIONE E SINCRONIZZAZIONE ---
         const DEFAULT_TITLE = "Weekend sul Lago";
         const CHECKLIST_CATEGORIES = [
             { id: 'standard', name: 'Documenti e Dotazioni' },
@@ -632,8 +653,20 @@
 
         let currentTripIndex = 0;
 
+        // Ascolto in tempo reale dei cambiamenti su Firebase
+        tripsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                trips = Array.isArray(data) ? data : Object.values(data);
+                localStorage.setItem('vanlife_trips_gr', JSON.stringify(trips));
+                renderApp();
+            }
+        });
+
+        // Salva dati sia in locale che nel cloud
         function saveTrips() {
             localStorage.setItem('vanlife_trips_gr', JSON.stringify(trips));
+            tripsRef.set(trips);
         }
 
         function autoExpandTextarea(textarea) {
