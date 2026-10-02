@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vanlife check G&R</title>
+    
+    <!-- Meta tag per PWA & iOS -->
+    <meta name="theme-color" content="#1F4D43">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Vanlife Check">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --green-dark: #1F4D43;
+            --green-darker: #14352E;
+            --green-medium: #2D6A5D;
+            --green-sage: #B4C8B9;
+            --green-light: #E4ECE5;
+            
+            --bg-color: #F4F6F4;
+            --card-bg: #FFFFFF;
+            --pill-bg: #E8EFEA;
+            
+            --text-dark: #1E2925;
+            --text-muted: #5F7367;
+            
+            --coral-red: #D9534F;
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            
+            --shadow-sm: 0 2px 8px rgba(20, 53, 46, 0.05);
+            --shadow-md: 0 6px 16px rgba(20, 53, 46, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            overflow-x: hidden;
+            padding-bottom: 24px;
+        }
+
+        /* HEADER COMPATTO */
+        header {
+            background: linear-gradient(180deg, var(--green-darker) 0%, var(--green-dark) 100%);
+            color: #fff;
+            padding: 10px 14px 16px 14px;
+            position: relative;
+            overflow: hidden;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            flex-shrink: 0;
+        }
+
+        .header-bg-landscape {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .van-logo-header {
+            width: 32px;
+            height: 24px;
+            fill: #FFFFFF;
+        }
+
+        .brand-title h1 {
+            font-size: 1rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.2px;
+        }
+
+        .brand-title span {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--green-sage);
+        }
+
+        /* CONTENITORE SLIDER SWIPE */
+        .slider-container {
+            flex: 1;
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+        }
+
+        .slider-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .trip-slide {
+            min-width: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 10px 12px 16px 12px;
+            gap: 10px;
+            scroll-snap-align: start;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* BARRA AZIONI CON MENU PERSONALIZZATO */
+        .action-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            width: 100%;
+            position: relative;
+        }
+
+        .custom-dropdown-container {
+            position: relative;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .trip-select-pill-btn {
+            width: 100%;
+            background: var(--pill-bg);
+            border-radius: 20px;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            border: 1px solid rgba(0,0,0,0.05);
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .pill-left-content {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .pill-left-content svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--green-dark);
+            flex-shrink: 0;
+        }
+
+        .pill-title-text {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* FRECCIA/TRIANGOLO INGRANDITA */
+        .triangle-icon {
+            width: 16px;
+            height: 16px;
+            fill: var(--green-dark);
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+
+        .custom-dropdown-container.open .triangle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* MENU TENDINA STILIZZATO (IN-STYLE) */
+        .custom-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            width: 100%;
+            background: #FFFFFF;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--green-light);
+            z-index: 100;
+            overflow: hidden;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .custom-dropdown-container.open .custom-dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 8px 12px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            cursor: pointer;
+            border-bottom: 1px solid var(--green-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:active, .dropdown-item.active {
+            background-color: var(--pill-bg);
+            color: var(--green-dark);
+        }
+
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .action-icon-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .btn-dup .action-icon-circle { background: var(--green-sage); color: var(--green-darker); }
+        .btn-del .action-icon-circle { background: #EAD0CD; color: var(--coral-red); }
+        .btn-add .action-icon-circle { background: var(--green-dark); color: #fff; }
+
+        .btn-del span { color: var(--coral-red); }
+
+        /* CARD DETTAGLI VIAGGIO */
+        .trip-main-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 10px 12px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .trip-card-header {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .trip-cover-img {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            background: linear-gradient(135deg, #a8c0b0, #6f9480);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .trip-info-header {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .trip-title-input {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            text-overflow: ellipsis;
+        }
+
+        .trip-date-place {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            width: 100%;
+        }
+
+        .date-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            width: 100%;
+            min-width: 0;
+            flex-wrap: wrap;
+        }
+
+        .date-inputs-wrap {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .date-row input {
+            border: none;
+            background: transparent;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            outline: none;
+            width: 95px;
+            max-width: 100%;
+            padding: 0;
+        }
+
+        /* CARD GENERICA (Checklist e Spesa) */
+        .card-container {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .card-header-bar {
+            background: var(--green-dark);
+            color: #fff;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 800;
+            font-size: 0.88rem;
+        }
+
+        .category-block {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--green-light);
+        }
+
+        .category-block:last-child {
+            border-bottom: none;
+        }
+
+        .category-header-text {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--green-dark);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 0;
+            gap: 6px;
+            width: 100%;
+        }
+
+        .item-label-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
+            cursor: pointer;
+        }
+
+        .item-checkbox {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--green-dark);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .item-text {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            word-break: break-word;
+            line-height: 1.2;
+            flex: 1;
+        }
+
+        .item-row.checked .item-text {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .btn-delete-item {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            cursor: pointer;
+            padding: 0 4px;
+            flex-shrink: 0;
+        }
+
+        .add-item-box {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px;
+            width: 100%;
+        }
+
+        .add-item-input {
+            flex: 1;
+            min-width: 0;
+            padding: 5px 8px;
+            border: 1px solid var(--green-light);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            outline: none;
+        }
+
+        .add-item-btn {
+            background: var(--green-dark);
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        /* DIARIO DI BORDO / NOTE LIBERE */
+        .notes-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 10px 12px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 100%;
+        }
+
+        .notes-card-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--green-dark);
+        }
+
+        .logbook-textarea {
+            width: 100%;
+            min-height: 70px;
+            padding: 8px;
+            border: 1px solid var(--green-light);
+            border-radius: var(--radius-md);
+            font-size: 0.82rem;
+            color: var(--text-dark);
+            background: var(--bg-color);
+            outline: none;
+            resize: none;
+            line-height: 1.35;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <svg class="header-bg-landscape" viewBox="0 0 500 150" preserveAspectRatio="none">
+            <path d="M0,150 L0,80 Q100,40 200,90 T400,60 T500,100 L500,150 Z" fill="#ffffff"/>
+        </svg>
+        <div class="header-top">
+            <div class="brand">
+                <svg class="van-logo-header" viewBox="0 0 100 80">
+                    <polygon points="18,39 65,39 65,22" fill="currentColor" />
+                    <path d="M 12,37 L 68,19 L 70,23 L 14,41 Z" fill="currentColor" />
+                    <path fill-rule="evenodd" d="
+                        M 10,40 L 68,40 L 82,53 Q 90,53 92,60 L 92,68 Q 92,72 88,72 L 85,72 
+                        A 9 9 0 0 0 67,72 L 45,72 A 9 9 0 0 0 27,72 L 14,72 Q 10,72 10,68 Z
+                        M 15,44 L 46,44 L 46,55 L 15,55 Z
+                        M 50,44 L 63,44 L 74,55 L 52,55 Z
+                    " fill="currentColor" />
+                    <circle cx="36" cy="72" r="6.5" fill="currentColor" />
+                    <circle cx="76" cy="72" r="6.5" fill="currentColor" />
+                </svg>
+                <div class="brand-title">
+                    <h1>Vanlife check</h1>
+                    <span>G&R</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="slider-container" id="sliderContainer"></div>
+
+    <script>
+        // CONFIGURAZIONE PWA
+        const manifest = {
+            name: "Vanlife Check G&R",
+            short_name: "VanlifeCheck",
+            start_url: "./",
+            display: "standalone",
+            background_color: "#1F4D43",
+            theme_color: "#1F4D43",
+            icons: [{
+                src: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231F4D43'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white'>🚐</text></svg>",
+                sizes: "192x192 512x512",
+                type: "image/svg+xml"
+            }]
+        };
+
+        const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(manifestBlob);
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = manifestURL;
+        document.head.appendChild(link);
+
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', e => e.waitUntil(self.skipWaiting()));
+                self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+                self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+            `;
+            const swBlob = new Blob([swCode], {type: 'text/javascript'});
+            const swURL = URL.createObjectURL(swBlob);
+            navigator.serviceWorker.register(swURL).catch(() => {});
+        }
+
+        // LOGICA APPLICAZIONE
+        const DEFAULT_TITLE = "Weekend sul Lago";
+        const CHECKLIST_CATEGORIES = [
+            { id: 'standard', name: 'Documenti e Dotazioni' },
+            { id: 'todo', name: 'Verifica Van / Cose da fare' }
+        ];
+
+        let trips = JSON.parse(localStorage.getItem('vanlife_trips_gr')) || [
+            {
+                id: 'trip_' + Date.now(),
+                title: 'Weekend sul Lago',
+                dateFrom: '2025-04-12',
+                dateTo: '2025-04-13',
+                notes: 'Area sosta consigliata con vista panoramica sul lago.',
+                items: {
+                    standard: [
+                        { text: 'Carta d’identità, patente, libretto', checked: true },
+                        { text: 'Cavi alimentazione 230V', checked: true }
+                    ],
+                    todo: [
+                        { text: 'Verifica acqua, gas, elettricità', checked: true },
+                        { text: 'Controllare livello olio', checked: false }
+                    ],
+                    shopping: [
+                        { text: 'Acqua minerale e caffè', checked: false }
+                    ]
+                }
+            }
+        ];
+
+        let currentTripIndex = 0;
+
+        function saveTrips() {
+            localStorage.setItem('vanlife_trips_gr', JSON.stringify(trips));
+        }
+
+        function autoExpandTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
+
+        function toggleDropdown(index, event) {
+            event.stopPropagation();
+            const container = document.getElementById(`dropdown_container_${index}`);
+            const isOpen = container.classList.contains('open');
+            
+            document.querySelectorAll('.custom-dropdown-container').forEach(c => c.classList.remove('open'));
+            if (!isOpen) {
+                container.classList.add('open');
+            }
+        }
+
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.custom-dropdown-container').forEach(c => c.classList.remove('open'));
+        });
+
+        function renderApp() {
+            const slider = document.getElementById('sliderContainer');
+            slider.innerHTML = '';
+
+            trips.forEach((trip, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'trip-slide';
+
+                let dropdownItemsHtml = '';
+                trips.forEach((t, i) => {
+                    dropdownItemsHtml += `
+                        <div class="dropdown-item ${i === index ? 'active' : ''}" onclick="switchTripByIndex(${i})">
+                            <span>${escapeHtml(t.title)}</span>
+                            ${i === index ? '✓' : ''}
+                        </div>
+                    `;
+                });
+
+                let checklistHtml = '';
+                CHECKLIST_CATEGORIES.forEach(cat => {
+                    const items = (trip.items && trip.items[cat.id]) ? trip.items[cat.id] : [];
+                    let itemsHtml = '';
+                    items.forEach((item, itemIdx) => {
+                        itemsHtml += `
+                            <div class="item-row ${item.checked ? 'checked' : ''}">
+                                <div class="item-label-container" onclick="toggleItem(${index}, '${cat.id}', ${itemIdx})">
+                                    <input type="checkbox" class="item-checkbox" ${item.checked ? 'checked' : ''} onclick="event.stopPropagation(); toggleItem(${index}, '${cat.id}', ${itemIdx})">
+                                    <span class="item-text">${escapeHtml(item.text)}</span>
+                                </div>
+                                <button class="btn-delete-item" onclick="deleteItem(${index}, '${cat.id}', ${itemIdx})">×</button>
+                            </div>
+                        `;
+                    });
+
+                    checklistHtml += `
+                        <div class="category-block">
+                            <div class="category-header-text">${cat.name}</div>
+                            <div class="items-list">${itemsHtml}</div>
+                            <div class="add-item-box">
+                                <input type="text" class="add-item-input" id="input_${index}_${cat.id}" placeholder="Aggiungi elemento..." onkeypress="handleKeyPress(event, ${index}, '${cat.id}')">
+                                <button class="add-item-btn" onclick="addItem(${index}, '${cat.id}')">+</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                const shopItems = (trip.items && trip.items['shopping']) ? trip.items['shopping'] : [];
+                let shoppingListHtml = '';
+                shopItems.forEach((item, itemIdx) => {
+                    shoppingListHtml += `
+                        <div class="item-row ${item.checked ? 'checked' : ''}">
+                            <div class="item-label-container" onclick="toggleItem(${index}, 'shopping', ${itemIdx})">
+                                <input type="checkbox" class="item-checkbox" ${item.checked ? 'checked' : ''} onclick="event.stopPropagation(); toggleItem(${index}, 'shopping', ${itemIdx})">
+                                <span class="item-text">${escapeHtml(item.text)}</span>
+                            </div>
+                            <button class="btn-delete-item" onclick="deleteItem(${index}, 'shopping', ${itemIdx})">×</button>
+                        </div>
+                    `;
+                });
+
+                slide.innerHTML = `
+                    <div class="action-bar">
+                        <div class="custom-dropdown-container" id="dropdown_container_${index}">
+                            <button class="trip-select-pill-btn" onclick="toggleDropdown(${index}, event)">
+                                <div class="pill-left-content">
+                                    <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4h14v4z"/></svg>
+                                    <span class="pill-title-text">${escapeHtml(trip.title)}</span>
+                                </div>
+                                <svg class="triangle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                            </button>
+                            <div class="custom-dropdown-menu">
+                                ${dropdownItemsHtml}
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="action-btn btn-dup" onclick="duplicateTrip(${index})">
+                                <div class="action-icon-circle">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                </div>
+                                <span>Duplica</span>
+                            </button>
+                            <button class="action-btn btn-del" onclick="deleteTrip(${index})">
+                                <div class="action-icon-circle">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                </div>
+                                <span>Elimina</span>
+                            </button>
+                            <button class="action-btn btn-add" onclick="addNewTrip()">
+                                <div class="action-icon-circle">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                </div>
+                                <span>Nuovo</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="trip-main-card">
+                        <div class="trip-card-header">
+                            <div class="trip-cover-img">
+                                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                            </div>
+                            <div class="trip-info-header">
+                                <input type="text" class="trip-title-input" value="${escapeHtml(trip.title)}" onchange="updateTripTitle(${index}, this.value)">
+                                <div class="trip-date-place">
+                                    <div class="date-row">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                        <div class="date-inputs-wrap">
+                                            <input type="date" value="${trip.dateFrom || ''}" onchange="updateTripDate(${index}, 'dateFrom', this.value)"> → 
+                                            <input type="date" value="${trip.dateTo || ''}" onchange="updateTripDate(${index}, 'dateTo', this.value)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-container">
+                        <div class="card-header-bar">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                            <span>Checklist viaggio</span>
+                        </div>
+                        ${checklistHtml}
+                    </div>
+
+                    <div class="card-container">
+                        <div class="card-header-bar">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                            <span>Lista della spesa</span>
+                        </div>
+                        <div class="category-block">
+                            <div class="items-list">${shoppingListHtml}</div>
+                            <div class="add-item-box">
+                                <input type="text" class="add-item-input" id="input_${index}_shopping" placeholder="Aggiungi prodotto alla spesa..." onkeypress="handleKeyPress(event, ${index}, 'shopping')">
+                                <button class="add-item-btn" onclick="addItem(${index}, 'shopping')">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="notes-card">
+                        <div class="notes-card-title">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                            <span>Diario di bordo / Note</span>
+                        </div>
+                        <textarea class="logbook-textarea" id="notes_${index}" oninput="updateTripNotes(${index}, this.value); autoExpandTextarea(this);" placeholder="Racconta il tuo viaggio, luoghi visitati o appunti...">${escapeHtml(trip.notes || '')}</textarea>
+                    </div>
+                `;
+
+                slider.appendChild(slide);
+
+                setTimeout(() => {
+                    const txt = document.getElementById(`notes_${index}`);
+                    if (txt) autoExpandTextarea(txt);
+                }, 0);
+            });
+        }
+
+        function switchTripByIndex(index) {
+            currentTripIndex = parseInt(index);
+            const slider = document.getElementById('sliderContainer');
+            if (slider.children[currentTripIndex]) {
+                slider.children[currentTripIndex].scrollIntoView({ behavior: 'smooth' });
+            }
+            document.querySelectorAll('.custom-dropdown-container').forEach(c => c.classList.remove('open'));
+        }
+
+        function updateTripTitle(index, val) {
+            trips[index].title = val.trim() || DEFAULT_TITLE;
+            saveTrips();
+            renderApp();
+            document.getElementById('sliderContainer').children[currentTripIndex].scrollIntoView({ behavior: 'instant' });
+        }
+
+        function updateTripDate(index, field, val) {
+            trips[index][field] = val;
+            saveTrips();
+        }
+
+        function updateTripNotes(index, val) {
+            trips[index].notes = val;
+            saveTrips();
+        }
+
+        function toggleItem(tripIndex, catId, itemIdx) {
+            trips[tripIndex].items[catId][itemIdx].checked = !trips[tripIndex].items[catId][itemIdx].checked;
+            saveTrips();
+            renderApp();
+            document.getElementById('sliderContainer').children[currentTripIndex].scrollIntoView({ behavior: 'instant' });
+        }
+
+        function deleteItem(tripIndex, catId, itemIdx) {
+            trips[tripIndex].items[catId].splice(itemIdx, 1);
+            saveTrips();
+            renderApp();
+            document.getElementById('sliderContainer').children[currentTripIndex].scrollIntoView({ behavior: 'instant' });
+        }
+
+        function addItem(tripIndex, catId) {
+            const input = document.getElementById(`input_${tripIndex}_${catId}`);
+            const text = input.value.trim();
+            if (!text) return;
+
+            if (!trips[tripIndex].items[catId]) {
+                trips[tripIndex].items[catId] = [];
+            }
+
+            trips[tripIndex].items[catId].push({ text: text, checked: false });
+            input.value = '';
+            saveTrips();
+            renderApp();
+            document.getElementById('sliderContainer').children[currentTripIndex].scrollIntoView({ behavior: 'instant' });
+        }
+
+        function handleKeyPress(event, tripIndex, catId) {
+            if (event.key === 'Enter') addItem(tripIndex, catId);
+        }
+
+        function addNewTrip() {
+            let clonedItems = { standard: [], todo: [], shopping: [] };
+
+            if (trips.length > 0) {
+                const lastTrip = trips[trips.length - 1];
+                CHECKLIST_CATEGORIES.forEach(cat => {
+                    if (lastTrip.items && lastTrip.items[cat.id]) {
+                        clonedItems[cat.id] = lastTrip.items[cat.id].map(i => ({ text: i.text, checked: false }));
+                    }
+                });
+            }
+
+            const newTrip = {
+                id: 'trip_' + Date.now(),
+                title: 'Nuovo Viaggio',
+                dateFrom: '',
+                dateTo: '',
+                notes: '',
+                items: clonedItems
+            };
+
+            trips.push(newTrip);
+            currentTripIndex = trips.length - 1;
+            saveTrips();
+            renderApp();
+            
+            const slider = document.getElementById('sliderContainer');
+            slider.children[currentTripIndex].scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function duplicateTrip(index) {
+            const curr = trips[index];
+            const cloned = JSON.parse(JSON.stringify(curr));
+            cloned.id = 'trip_' + Date.now();
+            cloned.title = curr.title + ' (Copia)';
+            trips.push(cloned);
+            currentTripIndex = trips.length - 1;
+            saveTrips();
+            renderApp();
+            
+            const slider = document.getElementById('sliderContainer');
+            slider.children[currentTripIndex].scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deleteTrip(index) {
+            if (trips.length <= 1) return alert("Impossibile eliminare l'unico viaggio rimasto!");
+            if (confirm("Vuoi davvero eliminare questo viaggio?")) {
+                trips.splice(index, 1);
+                currentTripIndex = Math.max(0, currentTripIndex - 1);
+                saveTrips();
+                renderApp();
+            }
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        const sliderContainer = document.getElementById('sliderContainer');
+        let isScrolling;
+        sliderContainer.addEventListener('scroll', () => {
+            window.clearTimeout(isScrolling);
+            isScrolling = setTimeout(() => {
+                const scrollLeft = sliderContainer.scrollLeft;
+                const width = sliderContainer.clientWidth;
+                const newIndex = Math.round(scrollLeft / width);
+                if (newIndex !== currentTripIndex && newIndex >= 0 && newIndex < trips.length) {
+                    currentTripIndex = newIndex;
+                }
+            }, 60);
+        });
+
+        renderApp();
+    </script>
+</body>
+</html>
