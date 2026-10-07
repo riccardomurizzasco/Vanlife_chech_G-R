@@ -331,40 +331,27 @@
             display: block;
         }
 
-        .cover-badge {
-            position: absolute;
-            right: -4px;
-            bottom: -4px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--green-dark);
-            color: #fff;
-            border: 2px solid #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
+        .cover-menu-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            background: var(--pill-bg);
+            color: var(--green-dark);
         }
 
-        .cover-remove {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--coral-red);
-            color: #fff;
-            border: 2px solid #fff;
-            font-size: 0.7rem;
-            font-weight: 800;
-            line-height: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            padding: 0;
+        .cover-menu-btn.danger {
+            background: #F6E3E1;
+            color: var(--coral-red);
+        }
+
+        .cover-menu-btn.cancel {
+            background: transparent;
+            color: var(--text-muted);
         }
 
         .trip-cover-img.loading {
@@ -846,6 +833,15 @@
     <!-- Selettore immagine viaggio (nascosto) -->
     <input type="file" id="coverFileInput" accept="image/*" style="display:none" onchange="handleCoverFile(this)">
 
+    <!-- MENU IMMAGINE VIAGGIO (si apre toccando l'immagine quando è già presente) -->
+    <div class="modal-overlay" id="coverMenu" onclick="if (event.target === this) closeCoverMenu()">
+        <div class="modal-sheet">
+            <button class="cover-menu-btn" onclick="closeCoverMenu(); openCoverPicker()">Cambia immagine</button>
+            <button class="cover-menu-btn danger" onclick="closeCoverMenu(); removeCover(coverTargetIndex)">Rimuovi immagine e torna al logo</button>
+            <button class="cover-menu-btn cancel" onclick="closeCoverMenu()">Annulla</button>
+        </div>
+    </div>
+
     <!-- MODALE VIAGGIATORI -->
     <div class="modal-overlay" id="travelersModal" onclick="if (event.target === this) closeTravelersModal()">
         <div class="modal-sheet">
@@ -1240,10 +1236,8 @@
                         <div class="trip-card-header">
                             <div class="trip-cover-img" id="cover_${index}" onclick="pickCover(${index})" title="${trip.cover ? 'Cambia immagine' : 'Aggiungi immagine'}">
                                 ${trip.cover
-                                    ? `<img src="${trip.cover}" alt="">
-                                       <button class="cover-remove" onclick="event.stopPropagation(); removeCover(${index})" title="Rimuovi immagine">×</button>`
-                                    : `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                                       <span class="cover-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></span>`}
+                                    ? `<img src="${trip.cover}" alt="">`
+                                    : `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>`}
                             </div>
                             <div class="trip-info-header">
                                 <input type="text" class="trip-title-input" value="${escapeHtml(trip.title)}" onchange="updateTripTitle(${index}, this.value)">
@@ -1366,12 +1360,25 @@
 
         let coverTargetIndex = null;
 
+        // Tocco sul logo: senza immagine apre subito la galleria, con immagine chiede se cambiarla o rimuoverla
         function pickCover(index) {
             coverTargetIndex = index;
             currentTripIndex = index;
+            if (trips[index] && trips[index].cover) {
+                document.getElementById('coverMenu').classList.add('open');
+            } else {
+                openCoverPicker();
+            }
+        }
+
+        function openCoverPicker() {
             const input = document.getElementById('coverFileInput');
             input.value = '';
             input.click();
+        }
+
+        function closeCoverMenu() {
+            document.getElementById('coverMenu').classList.remove('open');
         }
 
         // Ridimensiona e ritaglia a quadrato (max 400px, JPEG) per non appesantire il database
@@ -1419,7 +1426,7 @@
         }
 
         function removeCover(index) {
-            if (!confirm("Rimuovere l'immagine di questo viaggio?")) return;
+            if (!trips[index]) return;
             trips[index].cover = '';
             currentTripIndex = index;
             saveTrips();
