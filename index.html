@@ -501,6 +501,229 @@
             flex-shrink: 0;
         }
 
+        /* BAGAGLIO PERSONALE / VIAGGIATORI */
+        .header-manage-btn {
+            margin-left: auto;
+            background: rgba(255,255,255,0.16);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            padding: 4px 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .traveler-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--green-light);
+        }
+
+        .traveler-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 10px 3px 3px;
+            border-radius: 16px;
+            border: 1.5px solid var(--green-light);
+            background: #fff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .traveler-chip.selected {
+            background: var(--pill-bg);
+            border-color: var(--green-dark);
+            color: var(--text-dark);
+        }
+
+        .traveler-chip:not(.selected) .avatar {
+            opacity: 0.4;
+        }
+
+        .traveler-chip.add-chip {
+            padding: 3px 10px;
+            border-style: dashed;
+            color: var(--green-dark);
+        }
+
+        .avatar {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 0.68rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: none;
+        }
+
+        .personal-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .personal-name {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .personal-count {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            background: var(--pill-bg);
+            padding: 2px 8px;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .personal-count.done {
+            background: var(--green-dark);
+            color: #fff;
+        }
+
+        .empty-hint {
+            padding: 10px 12px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* MODALE GESTIONE VIAGGIATORI */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 53, 46, 0.45);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 500;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-sheet {
+            background: #fff;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 18px 18px 0 0;
+            padding: 14px 14px 24px 14px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .modal-head h2 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--green-dark);
+        }
+
+        .modal-close {
+            background: var(--pill-bg);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            color: var(--green-dark);
+            cursor: pointer;
+        }
+
+        .modal-hint {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .traveler-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--green-light);
+        }
+
+        .traveler-row .avatar {
+            width: 28px;
+            height: 28px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .traveler-row input {
+            flex: 1;
+            min-width: 0;
+            border: 1px solid var(--green-light);
+            border-radius: var(--radius-sm);
+            padding: 6px 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            outline: none;
+        }
+
+        .traveler-row .btn-delete-item {
+            color: var(--coral-red);
+            font-size: 1.2rem;
+        }
+
+        .modal-add-row {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .modal-add-row input {
+            flex: 1;
+            min-width: 0;
+            padding: 8px 10px;
+            border: 1px solid var(--green-sage);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .modal-add-row button {
+            background: var(--green-dark);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 0 14px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
         /* DIARIO DI BORDO / NOTE LIBERE */
         .notes-card {
             background: var(--card-bg);
@@ -568,6 +791,22 @@
 
     <div class="slider-container" id="sliderContainer"></div>
 
+    <!-- MODALE VIAGGIATORI -->
+    <div class="modal-overlay" id="travelersModal" onclick="if (event.target === this) closeTravelersModal()">
+        <div class="modal-sheet">
+            <div class="modal-head">
+                <h2>Viaggiatori</h2>
+                <button class="modal-close" onclick="closeTravelersModal()">×</button>
+            </div>
+            <div class="modal-hint">Tocca il cerchio per cambiare colore, modifica il nome direttamente nel campo. I viaggiatori valgono per tutti i viaggi: in ogni viaggio scegli chi parte.</div>
+            <div id="travelersList"></div>
+            <div class="modal-add-row">
+                <input type="text" id="newTravelerInput" placeholder="Nome nuovo viaggiatore..." onkeypress="if (event.key === 'Enter') addTraveler()">
+                <button onclick="addTraveler()">Aggiungi</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         
         const firebaseConfig = {
@@ -587,6 +826,7 @@
         }
         const db = firebase.database();
         const tripsRef = db.ref('vanlife_trips');
+        const travelersRef = db.ref('vanlife_travelers');
 
         // --- CONFIGURAZIONE PWA ---
         const manifest = {
@@ -627,6 +867,55 @@
             { id: 'standard', name: 'Documenti e Dotazioni' },
             { id: 'todo', name: 'Verifica Van / Cose da fare' }
         ];
+        const TRAVELER_COLORS = ['#2D6A5D', '#C9783A', '#4A7BA8', '#9B5A8A', '#B5944A', '#D9534F', '#5B8C3A', '#5F7367'];
+
+        // Firebase elimina gli array vuoti e può restituire oggetti al posto degli array:
+        // queste funzioni riportano sempre i dati in una forma coerente.
+        function toArr(v) {
+            if (Array.isArray(v)) return v.filter(Boolean);
+            if (v && typeof v === 'object') return Object.values(v).filter(Boolean);
+            return [];
+        }
+
+        function normalizeTrip(t) {
+            const items = t.items || {};
+            const personal = {};
+            Object.keys(t.personal || {}).forEach(tid => {
+                const list = toArr(t.personal[tid]).map(i => ({ text: i.text || '', checked: !!i.checked }));
+                if (list.length) personal[tid] = list;
+            });
+            const cleanList = v => toArr(v).map(i => ({ text: i.text || '', checked: !!i.checked }));
+            return {
+                id: t.id || ('trip_' + Date.now()),
+                title: t.title || DEFAULT_TITLE,
+                dateFrom: t.dateFrom || '',
+                dateTo: t.dateTo || '',
+                notes: t.notes || '',
+                items: {
+                    standard: cleanList(items.standard),
+                    todo: cleanList(items.todo),
+                    shopping: cleanList(items.shopping)
+                },
+                travelers: toArr(t.travelers),
+                personal: personal
+            };
+        }
+
+        function normalizeTraveler(t, i) {
+            return {
+                id: t.id,
+                name: t.name || 'Viaggiatore',
+                color: t.color || TRAVELER_COLORS[i % TRAVELER_COLORS.length]
+            };
+        }
+
+        function stableStringify(v) {
+            if (Array.isArray(v)) return '[' + v.map(stableStringify).join(',') + ']';
+            if (v && typeof v === 'object') {
+                return '{' + Object.keys(v).sort().map(k => JSON.stringify(k) + ':' + stableStringify(v[k])).join(',') + '}';
+            }
+            return JSON.stringify(v === undefined ? null : v);
+        }
 
         let trips = JSON.parse(localStorage.getItem('vanlife_trips_gr')) || [
             {
@@ -647,26 +936,57 @@
                     shopping: [
                         { text: 'Acqua minerale e caffè', checked: false }
                     ]
-                }
+                },
+                travelers: [],
+                personal: {}
             }
         ];
+        trips = trips.map(normalizeTrip);
+
+        let travelers = toArr(JSON.parse(localStorage.getItem('vanlife_travelers_gr'))).filter(t => t.id).map(normalizeTraveler);
 
         let currentTripIndex = 0;
 
-        // Ascolto in tempo reale dei cambiamenti su Firebase
+        // Ascolto in tempo reale dei cambiamenti su Firebase (viaggi)
         tripsRef.on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                trips = Array.isArray(data) ? data : Object.values(data);
+                const incoming = toArr(data).map(normalizeTrip);
+                // Se i dati sono gli stessi già mostrati non ridisegno (evita di perdere il focus mentre scrivi)
+                if (stableStringify(incoming) === stableStringify(trips.map(normalizeTrip))) return;
+                trips = incoming;
+                if (currentTripIndex > trips.length - 1) currentTripIndex = Math.max(0, trips.length - 1);
                 localStorage.setItem('vanlife_trips_gr', JSON.stringify(trips));
                 renderApp();
+                restoreSlide();
             }
+        });
+
+        // Ascolto in tempo reale dei cambiamenti su Firebase (viaggiatori)
+        travelersRef.on('value', (snapshot) => {
+            const incoming = toArr(snapshot.val()).filter(t => t.id).map(normalizeTraveler);
+            if (stableStringify(incoming) === stableStringify(travelers)) return;
+            travelers = incoming;
+            localStorage.setItem('vanlife_travelers_gr', JSON.stringify(travelers));
+            renderApp();
+            restoreSlide();
+            if (document.getElementById('travelersModal').classList.contains('open')) renderTravelersModal();
         });
 
         // Salva dati sia in locale che nel cloud
         function saveTrips() {
             localStorage.setItem('vanlife_trips_gr', JSON.stringify(trips));
             tripsRef.set(trips);
+        }
+
+        function saveTravelers() {
+            localStorage.setItem('vanlife_travelers_gr', JSON.stringify(travelers));
+            travelersRef.set(travelers);
+        }
+
+        function restoreSlide() {
+            const s = document.getElementById('sliderContainer');
+            s.scrollTo({ left: currentTripIndex * s.clientWidth, behavior: 'instant' });
         }
 
         function autoExpandTextarea(textarea) {
@@ -688,6 +1008,80 @@
         document.addEventListener('click', () => {
             document.querySelectorAll('.custom-dropdown-container').forEach(c => c.classList.remove('open'));
         });
+
+        function initial(name) {
+            return escapeHtml((name || '?').trim().charAt(0).toUpperCase() || '?');
+        }
+
+        function buildPersonalHtml(trip, index) {
+            let chipsHtml = '';
+            travelers.forEach(tr => {
+                const sel = trip.travelers.includes(tr.id);
+                chipsHtml += `
+                    <button class="traveler-chip ${sel ? 'selected' : ''}" onclick="toggleTripTraveler(${index}, '${tr.id}')">
+                        <span class="avatar" style="background:${tr.color}">${initial(tr.name)}</span>
+                        <span>${escapeHtml(tr.name)}</span>
+                    </button>
+                `;
+            });
+            chipsHtml += `<button class="traveler-chip add-chip" onclick="openTravelersModal(true)">+ Viaggiatore</button>`;
+
+            const selected = travelers.filter(tr => trip.travelers.includes(tr.id));
+            let blocksHtml = '';
+
+            if (travelers.length === 0) {
+                blocksHtml = `<div class="empty-hint">Crea i viaggiatori con “+ Viaggiatore”, poi selezionali per preparare la lista personale di ognuno.</div>`;
+            } else if (selected.length === 0) {
+                blocksHtml = `<div class="empty-hint">Tocca un nome qui sopra per indicare chi parte per questo viaggio.</div>`;
+            }
+
+            selected.forEach(tr => {
+                const list = trip.personal[tr.id] || [];
+                const done = list.filter(i => i.checked).length;
+                let itemsHtml = '';
+                list.forEach((item, itemIdx) => {
+                    itemsHtml += `
+                        <div class="item-row ${item.checked ? 'checked' : ''}">
+                            <div class="item-label-container" onclick="togglePersonalItem(${index}, '${tr.id}', ${itemIdx})">
+                                <input type="checkbox" class="item-checkbox" ${item.checked ? 'checked' : ''} onclick="event.stopPropagation(); togglePersonalItem(${index}, '${tr.id}', ${itemIdx})">
+                                <span class="item-text">${escapeHtml(item.text)}</span>
+                            </div>
+                            <button class="btn-delete-item" onclick="deletePersonalItem(${index}, '${tr.id}', ${itemIdx})">×</button>
+                        </div>
+                    `;
+                });
+
+                blocksHtml += `
+                    <div class="category-block">
+                        <div class="personal-header">
+                            <span class="avatar" style="background:${tr.color}">${initial(tr.name)}</span>
+                            <span class="personal-name">${escapeHtml(tr.name)}</span>
+                            <span class="personal-count ${list.length && done === list.length ? 'done' : ''}">${done}/${list.length}</span>
+                        </div>
+                        <div class="items-list">${itemsHtml}</div>
+                        <div class="add-item-box">
+                            <input type="text" class="add-item-input" id="input_${index}_p_${tr.id}" placeholder="Cosa deve portare ${escapeHtml(tr.name)}..." onkeypress="if (event.key === 'Enter') addPersonalItem(${index}, '${tr.id}')">
+                            <button class="add-item-btn" onclick="addPersonalItem(${index}, '${tr.id}')">+</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            return `
+                <div class="card-container">
+                    <div class="card-header-bar">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="7" width="14" height="14" rx="2"></rect><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"></path><line x1="9" y1="11" x2="9" y2="17"></line><line x1="15" y1="11" x2="15" y2="17"></line></svg>
+                        <span>Bagaglio personale</span>
+                        <button class="header-manage-btn" onclick="openTravelersModal(false)">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            Gestisci
+                        </button>
+                    </div>
+                    <div class="traveler-chips">${chipsHtml}</div>
+                    ${blocksHtml}
+                </div>
+            `;
+        }
 
         function renderApp() {
             const slider = document.getElementById('sliderContainer');
@@ -814,6 +1208,8 @@
                         ${checklistHtml}
                     </div>
 
+                    ${buildPersonalHtml(trip, index)}
+
                     <div class="card-container">
                         <div class="card-header-bar">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
@@ -906,8 +1302,167 @@
             if (event.key === 'Enter') addItem(tripIndex, catId);
         }
 
+        // --- BAGAGLIO PERSONALE ---
+
+        // Lista di partenza per un viaggiatore: la sua ultima lista usata in un altro viaggio (tutto da spuntare)
+        function personalTemplateFor(tid, excludeIndex) {
+            for (let i = trips.length - 1; i >= 0; i--) {
+                if (i === excludeIndex) continue;
+                const list = trips[i].personal && trips[i].personal[tid];
+                if (list && list.length) return list.map(x => ({ text: x.text, checked: false }));
+            }
+            return [];
+        }
+
+        function toggleTripTraveler(index, tid) {
+            const trip = trips[index];
+            trip.travelers = trip.travelers || [];
+            trip.personal = trip.personal || {};
+            const pos = trip.travelers.indexOf(tid);
+            if (pos >= 0) {
+                trip.travelers.splice(pos, 1); // la sua lista resta salvata: se lo riselezioni la ritrovi
+            } else {
+                trip.travelers.push(tid);
+                if (!trip.personal[tid] || !trip.personal[tid].length) {
+                    trip.personal[tid] = personalTemplateFor(tid, index);
+                }
+            }
+            currentTripIndex = index;
+            saveTrips();
+            renderApp();
+            restoreSlide();
+        }
+
+        function addPersonalItem(index, tid) {
+            const input = document.getElementById(`input_${index}_p_${tid}`);
+            const text = input.value.trim();
+            if (!text) return;
+            const trip = trips[index];
+            trip.personal = trip.personal || {};
+            if (!trip.personal[tid]) trip.personal[tid] = [];
+            trip.personal[tid].push({ text: text, checked: false });
+            input.value = '';
+            currentTripIndex = index;
+            saveTrips();
+            renderApp();
+            restoreSlide();
+            const again = document.getElementById(`input_${index}_p_${tid}`);
+            if (again) again.focus({ preventScroll: true });
+        }
+
+        function togglePersonalItem(index, tid, itemIdx) {
+            const item = trips[index].personal[tid][itemIdx];
+            item.checked = !item.checked;
+            currentTripIndex = index;
+            saveTrips();
+            renderApp();
+            restoreSlide();
+        }
+
+        function deletePersonalItem(index, tid, itemIdx) {
+            trips[index].personal[tid].splice(itemIdx, 1);
+            currentTripIndex = index;
+            saveTrips();
+            renderApp();
+            restoreSlide();
+        }
+
+        // --- GESTIONE VIAGGIATORI ---
+
+        function openTravelersModal(focusAdd) {
+            renderTravelersModal();
+            document.getElementById('travelersModal').classList.add('open');
+            if (focusAdd) setTimeout(() => document.getElementById('newTravelerInput').focus(), 50);
+        }
+
+        function closeTravelersModal() {
+            document.getElementById('travelersModal').classList.remove('open');
+        }
+
+        function renderTravelersModal() {
+            const box = document.getElementById('travelersList');
+            if (!travelers.length) {
+                box.innerHTML = `<div class="empty-hint" style="padding:6px 0">Nessun viaggiatore ancora.</div>`;
+                return;
+            }
+            box.innerHTML = travelers.map(tr => `
+                <div class="traveler-row">
+                    <button class="avatar" style="background:${tr.color}" onclick="cycleTravelerColor('${tr.id}')" title="Cambia colore">${initial(tr.name)}</button>
+                    <input type="text" value="${escapeHtml(tr.name)}" onchange="renameTraveler('${tr.id}', this.value)">
+                    <button class="btn-delete-item" onclick="deleteTraveler('${tr.id}')" title="Elimina">×</button>
+                </div>
+            `).join('');
+        }
+
+        function addTraveler() {
+            const input = document.getElementById('newTravelerInput');
+            const name = input.value.trim();
+            if (!name) return;
+            const tr = {
+                id: 'tr_' + Date.now(),
+                name: name,
+                color: TRAVELER_COLORS[travelers.length % TRAVELER_COLORS.length]
+            };
+            travelers.push(tr);
+            input.value = '';
+
+            // Lo seleziono subito nel viaggio che stai guardando
+            const trip = trips[currentTripIndex];
+            if (trip) {
+                trip.travelers = trip.travelers || [];
+                trip.travelers.push(tr.id);
+                saveTrips();
+            }
+            saveTravelers();
+            renderTravelersModal();
+            renderApp();
+            restoreSlide();
+            input.focus();
+        }
+
+        function renameTraveler(id, val) {
+            const tr = travelers.find(t => t.id === id);
+            if (!tr) return;
+            tr.name = val.trim() || tr.name;
+            saveTravelers();
+            renderTravelersModal();
+            renderApp();
+            restoreSlide();
+        }
+
+        function cycleTravelerColor(id) {
+            const tr = travelers.find(t => t.id === id);
+            if (!tr) return;
+            const i = TRAVELER_COLORS.indexOf(tr.color);
+            tr.color = TRAVELER_COLORS[(i + 1) % TRAVELER_COLORS.length];
+            saveTravelers();
+            renderTravelersModal();
+            renderApp();
+            restoreSlide();
+        }
+
+        function deleteTraveler(id) {
+            const tr = travelers.find(t => t.id === id);
+            if (!tr) return;
+            if (!confirm(`Eliminare ${tr.name}? Verrà tolto da tutti i viaggi insieme alle sue liste personali.`)) return;
+            travelers = travelers.filter(t => t.id !== id);
+            trips.forEach(trip => {
+                trip.travelers = (trip.travelers || []).filter(t => t !== id);
+                if (trip.personal) delete trip.personal[id];
+            });
+            saveTravelers();
+            saveTrips();
+            renderTravelersModal();
+            renderApp();
+            restoreSlide();
+        }
+
+        // --- VIAGGI ---
+
         function addNewTrip() {
             let clonedItems = { standard: [], todo: [], shopping: [] };
+            let clonedTravelers = [];
+            let clonedPersonal = {};
 
             if (trips.length > 0) {
                 const lastTrip = trips[trips.length - 1];
@@ -915,6 +1470,12 @@
                     if (lastTrip.items && lastTrip.items[cat.id]) {
                         clonedItems[cat.id] = lastTrip.items[cat.id].map(i => ({ text: i.text, checked: false }));
                     }
+                });
+                // Stessi viaggiatori e stesse liste personali dell'ultimo viaggio, tutto da spuntare
+                clonedTravelers = (lastTrip.travelers || []).filter(tid => travelers.some(t => t.id === tid));
+                clonedTravelers.forEach(tid => {
+                    const list = lastTrip.personal && lastTrip.personal[tid];
+                    if (list && list.length) clonedPersonal[tid] = list.map(i => ({ text: i.text, checked: false }));
                 });
             }
 
@@ -924,7 +1485,9 @@
                 dateFrom: '',
                 dateTo: '',
                 notes: '',
-                items: clonedItems
+                items: clonedItems,
+                travelers: clonedTravelers,
+                personal: clonedPersonal
             };
 
             trips.push(newTrip);
@@ -961,7 +1524,7 @@
         }
 
         function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+            return String(str ?? '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
         }
 
         const sliderContainer = document.getElementById('sliderContainer');
